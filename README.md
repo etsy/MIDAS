@@ -341,7 +341,7 @@ Contributors
 ------------
 
 + __Mike Arpaia__ ([@mikearpaia](https://twitter.com/mikearpaia))
-+ __Chris Biettchert__
++ __Chris Biettchert__ ([@chrisbiettchert](https://twitter.com/chrisbiettchert))
 + __Ben Hughes__ ([@benjammingh](https://twitter.com/benjammingh))
 + __Zane Lackey__ ([@zanelackey](https://twitter.com/zanelackey))
 + __mimeframe__ ([@mimeframe](https://twitter.com/mimeframe))
