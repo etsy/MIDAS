@@ -51,37 +51,34 @@ class DataScience():
                     new_entries.append(i)
 
         for i in new_entries:
-            master = "ty_name=\"%s\" " % self.tablename
+            master = 'ty_name="%s" ' % (self.tablename, )
             for key, value in i.iteritems():
                 if value != "KEY DNE":
-                    master += "%s=\"%s\" " % (key, value)
+                    master += '%s="%s"' % (key, value)
             self.orm.insert(self.tablename, i)
             print master
         return new_entries
 
     def __master_string(self, tablename, key):
         """master_string is an internal helper for generating a log ling"""
-        return "ty_name=\"%s\" name=\"%s\" changed_entry=\"true\"" % (
-            tablename, key
-        )
+        return 'ty_name="%s" name="%s" changed_entry="true"' % (
+            tablename, key)
 
     def __diff_string(self, changed_field, i_key, data, key, diff_string):
         """diff_string is an internal helpers for get_changed_entries"""
-        master = " %s=\"%s\" %s_old=\"%s\" %s_last_updated=\"%s\"" % (
+        master = ' %s="%s" %s_old="%s" %s_last_updated="%s"' % (
             changed_field,
             i_key,
             changed_field,
             data[key],
             changed_field,
-            data["date"],
-        )
+            data["date"],)
         if diff_string != [data[key], i_key]:
-            master += " %s_diff_added=\"%s\" %s_diff_removed=\"%s\"" % (
+            master += ' %s_diff_added="%s" %s_diff_removed="%s"' % (
                 changed_field,
                 diff_string[0],
                 changed_field,
-                diff_string[1],
-            )
+                diff_string[1],)
         return master
 
     def get_changed_entries(self):
@@ -133,11 +130,10 @@ class DataScience():
             for i in self.all_data:
                 data = self.find_in_data(self.new_data, self.key, i[self.key])
                 if not data:
-                    master = "ty_name=%s removed_entry=\"true\" " % (
-                        self.tablename,
-                    )
+                    master = 'ty_name=%s removed_entry="true" ' % (
+                        self.tablename,)
                     for key, value in i.iteritems():
                         if value != "KEY DNE" and not key.startswith("_"):
-                            master += "%s=\"%s\" " % (key, value)
+                            master += '%s="%s" ' % (key, value)
                     print master
                     self.orm.delete(i)
