@@ -26,7 +26,7 @@ def list_all_in_dir(directory):
     """
     try:
         if not directory.endswith('/'):
-            directory = "%s/" % directory
+            directory = "%s/" % (directory, )
     except AttributeError:
         return []
     except OSError:
@@ -45,7 +45,7 @@ def list_files_in_dir(directory):
     """
     try:
         if not directory.endswith('/'):
-            directory = "%s/" % directory
+            directory = "%s/" % (directory, )
     except AttributeError:
         return []
     except OSError:
@@ -64,7 +64,7 @@ def list_dirs_in_dir(directory):
     """
     try:
         if not directory.endswith('/'):
-            directory = "%s/" % directory
+            directory = "%s/" % (directory, )
     except AttributeError:
         return []
     except OSError:
@@ -130,8 +130,8 @@ def get_documents():
         "numbers"
     ]
     for ext in file_extensions:
-        arg = "kMDItemDisplayName == *.%s" % ext
-        files += shell_out("mdfind %s" % arg)
+        arg = "kMDItemDisplayName == *.%s" % (ext, )
+        files += shell_out("mdfind %s" % (arg, ))
     return filter(None, files)
 
 
@@ -144,47 +144,39 @@ def hash_kext(kextfind, kext):
     found = None
     for i in kextfind:
         if i.split('/')[-1].strip('.kext') == kext:
-            path = '/'.join([i, "Contents/MacOS/%s" % kext])
+            path = join(i, "Contents", "MacOS", kext)
             if isfile(path):
                 found = path
                 break
     else:
-        path = '/'.join(
-            [
-                '/System/Library/Extensions',
-                "%s.kext" % kext,
-                'Contents/MacOS',
-                kext
-            ]
-        )
+        ext_root = join('/System', 'Library', 'Extensions')
+
+        path = join(ext_root,
+                    "%s.kext" % (kext, ),
+                    'Contents', 'MacOS',
+                    kext)
+
         if isfile(path):
             return hash_file(path)
-        path = '/'.join(
-            [
-                '/System/Library/Extensions',
-                "Apple%s.kext" % kext,
-                'Contents/MacOS',
-                "Apple%s" % kext]
-        )
+
+        path = join(ext_root,
+                    "Apple%s.kext" % (kext, ),
+                    'Contents', 'MacOS',
+                    "Apple%s" % (kext, ))
+
         if isfile(path):
             return hash_file(path)
-        path = '/'.join(
-            [
-                '/System/Library/Extensions',
-                "%s.kext" % kext,
-                kext
-            ]
-        )
+
+        path = join(ext_root, "%s.kext" % (kext, ), kext)
+
         if isfile(path):
             return hash_file(path)
-        path = '/'.join(
-            [
-                '/System/Library/Filesystems/AppleShare',
-                "%s.kext" % kext,
-                'Contents/MacOS',
-                kext
-            ]
-        )
+
+        path = join('/System', 'Library', 'Filesystems', 'AppleShare',
+                     "%s.kext" % (kext, ),
+                     'Contents', 'MacOS',
+                     kext)
+
         if isfile(path):
             return hash_file(path)
 
@@ -237,10 +229,10 @@ def find_with_perms(directory, perms):
     """
     files = []
     for [i, _, _] in walk(directory):
-        if match(r"%s" % perms, oct(stat(i)[ST_MODE])[-3:]):
+        if match(r"%s" % (perms, ), oct(stat(i)[ST_MODE])[-3:]):
             files.append(i)
         for fname in list_files_in_dir(i):
-            if match(r"%s" % perms, oct(stat(i)[ST_MODE])[-3:]):
+            if match(r"%s" % (perms, ), oct(stat(i)[ST_MODE])[-3:]):
                 files.append(fname)
     return files
 
@@ -417,8 +409,9 @@ def list_app_info_plist():
     info = []
     if applications:
         for app in applications:
-            if isfile('/'.join([app, "Contents/Info.plist"])):
-                info.append('/'.join([app, "Contents/Info.plist"]))
+            filename = join(app, 'Contents', 'Info.plist')
+            if isfile(filename):
+                info.append(filename)
     return info
 
 
@@ -431,8 +424,9 @@ def list_plugin_info_plist():
     info = []
     if plugins:
         for plugin in plugins:
-            if isfile('/'.join([plugin, "Contents/Info.plist"])):
-                info.append('/'.join([plugin, "Contents/Info.plist"]))
+            filename = join(plugin, 'Contents', 'Info.plist')
+            if isfile(filename):
+                info.append(filename)
     return info
 
 
@@ -441,12 +435,9 @@ def is_ssh_key(filename):
     Returns True if a file might be an ssh key, False if not
     """
     if isfile(filename) and getsizeof(filename) < 10000:
-        key = open(filename)
-        line1 = key.readline()
-        if match("^[-]*BEGIN.*PRIVATE KEY[-]*$", line1):
-            return True
-        else:
-            return False
+        with open(filename, 'rb') as key:
+            line1 = next(key)
+            return match("^[-]*BEGIN.*PRIVATE KEY[-]*$", line1) is not None
     else:
         return False
 

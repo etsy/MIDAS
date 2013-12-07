@@ -27,18 +27,18 @@ def to_ascii(value):
     """
     Returns the ascii representation of a given string
     """
-    if type(value) == str:
+    if isinstance(value, basestring):
         try:
             return value.encode("ascii", "replace")
         except UnicodeError:
             return None
         except Exception:
             return None
-    elif type(value) == dict:
+    elif isinstance(value, dict):
         try:
             temp_dict = {}
             for i, j in value.iteritems():
-                temp_dict[i] = str(j).encode("ascii", "replace")
+                temp_dict[i] = to_ascii(j)
             return temp_dict
         except UnicodeError:
             return None
@@ -59,9 +59,9 @@ def encode(string):
 
 def error_running_file(filename, section, error):
     """returns a string in log format if a module errors out"""
-    file_error = "ty_error_running_file=%s" % filename
-    section_error = "ty_error_section=%s" % section
-    error_message = "ty_error_message=\"%s\"" % repr(error)
+    file_error = "ty_error_running_file=%s" % (filename, )
+    section_error = "ty_error_section=%s" % (section, )
+    error_message = "ty_error_message=%r" % (error, )
 
     return " ".join([
         file_error,
