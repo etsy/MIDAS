@@ -26,7 +26,7 @@ def list_all_in_dir(directory):
     """
     try:
         if not directory.endswith('/'):
-            directory = "%s/" % directory
+            directory = "%s/" % (directory, )
     except AttributeError:
         return []
     except OSError:
@@ -45,7 +45,7 @@ def list_files_in_dir(directory):
     """
     try:
         if not directory.endswith('/'):
-            directory = "%s/" % directory
+            directory = "%s/" % (directory, )
     except AttributeError:
         return []
     except OSError:
@@ -64,7 +64,7 @@ def list_dirs_in_dir(directory):
     """
     try:
         if not directory.endswith('/'):
-            directory = "%s/" % directory
+            directory = "%s/" % (directory, )
     except AttributeError:
         return []
     except OSError:
@@ -130,8 +130,8 @@ def get_documents():
         "numbers"
     ]
     for ext in file_extensions:
-        arg = "kMDItemDisplayName == *.%s" % ext
-        files += shell_out("mdfind %s" % arg)
+        arg = "kMDItemDisplayName == *.%s" % (ext, )
+        files += shell_out("mdfind %s" % (arg, ))
     return filter(None, files)
 
 
@@ -144,7 +144,7 @@ def hash_kext(kextfind, kext):
     found = None
     for i in kextfind:
         if i.split('/')[-1].strip('.kext') == kext:
-            path = '/'.join([i, "Contents/MacOS/%s" % kext])
+            path = '/'.join([i, "Contents/MacOS/%s" % (kext, )])
             if isfile(path):
                 found = path
                 break
@@ -152,7 +152,7 @@ def hash_kext(kextfind, kext):
         path = '/'.join(
             [
                 '/System/Library/Extensions',
-                "%s.kext" % kext,
+                "%s.kext" % (kext, ),
                 'Contents/MacOS',
                 kext
             ]
@@ -162,16 +162,16 @@ def hash_kext(kextfind, kext):
         path = '/'.join(
             [
                 '/System/Library/Extensions',
-                "Apple%s.kext" % kext,
+                "Apple%s.kext" % (kext, ),
                 'Contents/MacOS',
-                "Apple%s" % kext]
+                "Apple%s" % (kext, )]
         )
         if isfile(path):
             return hash_file(path)
         path = '/'.join(
             [
                 '/System/Library/Extensions',
-                "%s.kext" % kext,
+                "%s.kext" % (kext, ),
                 kext
             ]
         )
@@ -180,7 +180,7 @@ def hash_kext(kextfind, kext):
         path = '/'.join(
             [
                 '/System/Library/Filesystems/AppleShare',
-                "%s.kext" % kext,
+                "%s.kext" % (kext, ),
                 'Contents/MacOS',
                 kext
             ]
@@ -237,10 +237,10 @@ def find_with_perms(directory, perms):
     """
     files = []
     for [i, _, _] in walk(directory):
-        if match(r"%s" % perms, oct(stat(i)[ST_MODE])[-3:]):
+        if match(r"%s" % (perms, ), oct(stat(i)[ST_MODE])[-3:]):
             files.append(i)
         for fname in list_files_in_dir(i):
-            if match(r"%s" % perms, oct(stat(i)[ST_MODE])[-3:]):
+            if match(r"%s" % (perms, ), oct(stat(i)[ST_MODE])[-3:]):
                 files.append(fname)
     return files
 
