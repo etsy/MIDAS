@@ -140,13 +140,13 @@ class TyORM():
             columns = []
             for result in results:
                 columns.append(result[1])
-        if type(columns) is list:
+        if isinstance(columns, (list, tuple)):
             select_columns = columns
-        elif type(columns) is str:
+        elif isinstance(column, basestring):
             columns = columns.replace(" ", "").split(",")
             select_columns = columns
 
-        if type(select_columns) is list and select_columns:
+        if isinstance(select_columns, (list, tuple)) and select_columns:
             select_columns = ', '.join(select_columns)
 
         original_columns = []
@@ -168,7 +168,7 @@ class TyORM():
 
         parameterized_attrs = None
         if where is not None:
-            if type(where) is not list:
+            if not isinstance(where, (tuple, list)):
                 sql += " WHERE %s" % where
             else:
                 sql += "WHERE %s" % where[0]
@@ -253,11 +253,11 @@ class TyORM():
         data = to_ascii(data)
         if data is None:
             return None
-        if type(data) == dict:
+        if isinstance(data, dict):
             sql = "DELETE FROM \"%s\" WHERE id = ?;" % data["_table"]
             self.raw_sql(sql, [data["_id"]])
             return
-        elif type(data) == list:
+        elif isinstance(data, (list, tuple)):
             tables_and_ids = {}
             for i in data:
                 table = i["_table"]

@@ -106,13 +106,13 @@ class AnalyzePlist(object):
         value = get_plist_key(self.plist_file, key)
         if value:
             try:
-                if type(value) in [str, unicode]:
+                if isinstance(value, basestring):
                     # This should only get triggered by the Program key
                     self.data[key.lower()] = str(to_ascii(value))
                     self.data["%s_hash" % key.lower()] = hash_file(
                         str(to_ascii(value))
                     )
-                elif type(value) in [list]:
+                elif isinstance(value, (list, tuple)):
                     # This should only get triggered by the
                     # ProgramArguments key
                     self.data[key.lower()] = encode(" ".join(value))
