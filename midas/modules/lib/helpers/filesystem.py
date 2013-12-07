@@ -409,8 +409,9 @@ def list_app_info_plist():
     info = []
     if applications:
         for app in applications:
-            if isfile('/'.join([app, "Contents/Info.plist"])):
-                info.append('/'.join([app, "Contents/Info.plist"]))
+            filename = join(app, 'Contents', 'Info.plist')
+            if isfile(filename):
+                info.append(filename)
     return info
 
 
@@ -423,8 +424,9 @@ def list_plugin_info_plist():
     info = []
     if plugins:
         for plugin in plugins:
-            if isfile('/'.join([plugin, "Contents/Info.plist"])):
-                info.append('/'.join([plugin, "Contents/Info.plist"]))
+            filename = join(plugin, 'Contents', 'Info.plist')
+            if isfile(filename):
+                info.append(filename)
     return info
 
 
@@ -433,12 +435,9 @@ def is_ssh_key(filename):
     Returns True if a file might be an ssh key, False if not
     """
     if isfile(filename) and getsizeof(filename) < 10000:
-        key = open(filename)
-        line1 = key.readline()
-        if match("^[-]*BEGIN.*PRIVATE KEY[-]*$", line1):
-            return True
-        else:
-            return False
+        with open(filename, 'rb') as key:
+            line1 = next(key)
+            return match("^[-]*BEGIN.*PRIVATE KEY[-]*$", line1) is not None
     else:
         return False
 
