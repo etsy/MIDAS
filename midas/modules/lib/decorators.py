@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 """
-This is the declaration file for a set of useful decorators. 
-
-NOW WITH CLOSURES
+This is the declaration file for a set of useful decorators.
 """
 
 from time import strftime, gmtime, time
 
-def run_every_n_minutes(n, func):
+def run_every_n_minutes(n_minutes, func):
     """
-    a decorator for running functions every n minutes 
+    a decorator for running functions every n minutes
     """
     def decorated(*args, **kwargs):
         """
@@ -17,11 +15,11 @@ def run_every_n_minutes(n, func):
         """
         minute = int(strftime("%M", gmtime()))
         ret = None
-        if minute % n == 0:
+        if minute % n_minutes == 0:
             ret = func(*args, **kwargs)
         return ret
     return decorated
- 
+
 
 def run_every_5(func):
     """
