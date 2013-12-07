@@ -14,7 +14,7 @@ def analyze_something():
     """
     pass
 
-class AnalyzeSomethingComplex():
+class AnalyzeSomethingComplex(object):
     """Template class for analyzing something complex"""
 
     def __init__(self):
