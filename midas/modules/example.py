@@ -22,7 +22,7 @@ from lib.tables.example import tables
 from lib.decorators import run_every_60
 
 
-class AnalyzePlist():
+class AnalyzePlist(object):
     """AnalyzePlist analyzes property list files installed on the system"""
 
     def __init__(self):
@@ -177,7 +177,7 @@ class AnalyzePlist():
             self.post_new_files.append(self.data)
 
 
-class AnalyzeKexts():
+class AnalyzeKexts(object):
     """AnalyzeKexts analyzes and aggregates currently installed kernel
     extensions"""
 
@@ -211,7 +211,7 @@ class AnalyzeKexts():
 
 
 @run_every_60
-class AnalyzeFirewallKeys():
+class AnalyzeFirewallKeys(object):
     """
     AnalyzeFirewallKeys analyzes the top level keys of com.apple.alf.plist
     """
@@ -242,7 +242,7 @@ class AnalyzeFirewallKeys():
 
 
 @run_every_60
-class AnalyzeFirewallExceptions():
+class AnalyzeFirewallExceptions(object):
     """Analyzes the systems firewall exceptions"""
 
     def __init__(self):
@@ -276,7 +276,7 @@ class AnalyzeFirewallExceptions():
 
 
 @run_every_60
-class AnalyzeFirewallExplicitauths():
+class AnalyzeFirewallExplicitauths(object):
     """Analyzes the firewall's explicit auth"""
 
     def __init__(self):
@@ -306,7 +306,7 @@ class AnalyzeFirewallExplicitauths():
 
 
 @run_every_60
-class AnalyzeFirewallProcesses():
+class AnalyzeFirewallProcesses(object):
     """Analyzes the firewalled processes in the system firewall"""
 
     def __init__(self):
@@ -349,7 +349,7 @@ class AnalyzeFirewallProcesses():
 
 
 @run_every_60
-class AnalyzeFirewallApplications():
+class AnalyzeFirewallApplications(object):
     """Analyzes firewalled application state in the systems firewall"""
 
     def __init__(self):
