@@ -103,35 +103,34 @@ class AnalyzePlist(object):
         """
         Log the values of the launch agent/daemon keys in self.check_keys_hash
         """
+        key = key.lower()
+        key_hash = "%s_hash" % (key.lower(), )
+
         value = get_plist_key(self.plist_file, key)
         if value:
             try:
                 if isinstance(value, basestring):
                     # This should only get triggered by the Program key
-                    self.data[key.lower()] = str(to_ascii(value))
-                    self.data["%s_hash" % key.lower()] = hash_file(
-                        str(to_ascii(value))
-                    )
+                    self.data[key] = str(to_ascii(value))
+                    self.data[key_hash] = hash_file(str(to_ascii(value)))
                 elif isinstance(value, (list, tuple)):
                     # This should only get triggered by the
                     # ProgramArguments key
-                    self.data[key.lower()] = encode(" ".join(value))
-                    self.data["%s_hash" % key.lower()] = hash_file(
-                        str(value[0])
-                    )
+                    self.data[key] = encode(" ".join(value))
+                    self.data[key_hash] = hash_file(str(value[0]))
             except IOError:
-                self.data["%s_hash" % key.lower()] = "File DNE"
+                self.data[key_hash] = "File DNE"
         else:
-            self.data[key.lower()] = "KEY DNE"
-            self.data["%s_hash" % key.lower()] = "KEY DNE"
+            self.data[key] = "KEY DNE"
+            self.data[key_hash] = "KEY DNE"
 
     def analyze_changed_files(self):
         """
         analyze plists that have changed since last execution
         """
         where_params = self.changed_files.keys()
-        where_statement = "name=%s" % " OR name=".join(
-            ['?'] * len(where_params))
+        where_statement = "name=%s" % (" OR name=".join(
+            ['?'] * len(where_params)), )
         where_clause = [where_statement, where_params]
         self.pre_changed_files = ORM.select("plist", None, where_clause)
         for fname, fname_hash in self.changed_files.iteritems():
@@ -155,8 +154,8 @@ class AnalyzePlist(object):
         analyze new plists that are on the host
         """
         where_params = self.new_files.keys()
-        where_statement = "name=%s" % " OR name=".join(
-            ['?'] * len(where_params))
+        where_statement = "name=%s" % (" OR name=".join(
+            ['?'] * len(where_params)), )
         where_clause = [where_statement, where_params]
         self.pre_new_files = ORM.select("plist", None, where_clause)
         self.post_new_files = []
@@ -527,4 +526,4 @@ if __name__ == "__main__":
     # "--log" as a command line argument
     if "--log" in argv[1:]:
         logging.basicConfig(format='%(message)s', level=logging.INFO)
-    logging.info("Execution took %s seconds." % str(end - start))
+    logging.info("Execution took %s seconds.", str(end - start))
