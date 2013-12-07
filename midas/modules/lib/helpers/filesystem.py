@@ -144,47 +144,39 @@ def hash_kext(kextfind, kext):
     found = None
     for i in kextfind:
         if i.split('/')[-1].strip('.kext') == kext:
-            path = '/'.join([i, "Contents/MacOS/%s" % (kext, )])
+            path = join(i, "Contents", "MacOS", kext)
             if isfile(path):
                 found = path
                 break
     else:
-        path = '/'.join(
-            [
-                '/System/Library/Extensions',
-                "%s.kext" % (kext, ),
-                'Contents/MacOS',
-                kext
-            ]
-        )
+        ext_root = join('/System', 'Library', 'Extensions')
+
+        path = join(ext_root,
+                    "%s.kext" % (kext, ),
+                    'Contents', 'MacOS',
+                    kext)
+
         if isfile(path):
             return hash_file(path)
-        path = '/'.join(
-            [
-                '/System/Library/Extensions',
-                "Apple%s.kext" % (kext, ),
-                'Contents/MacOS',
-                "Apple%s" % (kext, )]
-        )
+
+        path = join(ext_root,
+                    "Apple%s.kext" % (kext, ),
+                    'Contents', 'MacOS',
+                    "Apple%s" % (kext, ))
+
         if isfile(path):
             return hash_file(path)
-        path = '/'.join(
-            [
-                '/System/Library/Extensions',
-                "%s.kext" % (kext, ),
-                kext
-            ]
-        )
+
+        path = join(ext_root, "%s.kext" % (kext, ), kext)
+
         if isfile(path):
             return hash_file(path)
-        path = '/'.join(
-            [
-                '/System/Library/Filesystems/AppleShare',
-                "%s.kext" % (kext, ),
-                'Contents/MacOS',
-                kext
-            ]
-        )
+
+        path = join('/System', 'Library', 'Filesystems', 'AppleShare',
+                     "%s.kext" % (kext, ),
+                     'Contents', 'MacOS',
+                     kext)
+
         if isfile(path):
             return hash_file(path)
 
