@@ -4,4 +4,4 @@ import os
 
 def touch():
     filename = open( '/tmp/gold', 'w' )
-    filename.close
+    filename.close()
