@@ -3,5 +3,4 @@
 import os
 
 def touch():
-    filename = open( '/tmp/gold', 'w' )
-    filename.close()
+    open( '/tmp/gold', 'w' ).close()
