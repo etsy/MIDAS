@@ -130,7 +130,7 @@ class DataScience():
             for i in self.all_data:
                 data = self.find_in_data(self.new_data, self.key, i[self.key])
                 if not data:
-                    master = 'ty_name=%s removed_entry="true" ' % (
+                    master = 'ty_name="%s" removed_entry="true" ' % (
                         self.tablename,)
                     for key, value in i.iteritems():
                         if value != "KEY DNE" and not key.startswith("_"):
