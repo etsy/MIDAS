@@ -83,15 +83,7 @@ def get_most_recently_updated_file(directory):
         return None
     if files:
         try:
-            files = {}
-            for i in files:
-                if not islink(i):
-                    files[i] = getmtime(i)
-            if files:
-                try:
-                    return sorted(files.iteritems(), key=itemgetter(1))[-1][0]
-                except KeyError:
-                    return None
+            return max(filter(lambda e: not islink(e), files), key=getmtime)
         except OSError:
             return None
     else:
