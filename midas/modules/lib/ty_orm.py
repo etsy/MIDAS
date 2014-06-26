@@ -142,7 +142,7 @@ class TyORM():
                 columns.append(result[1])
         if isinstance(columns, (list, tuple)):
             select_columns = columns
-        elif isinstance(column, basestring):
+        elif isinstance(columns, basestring):
             columns = columns.replace(" ", "").split(",")
             select_columns = columns
 
